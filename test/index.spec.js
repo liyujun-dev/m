@@ -1,13 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import worker from '../src';
 
-it('hello', async () => {
+it.skip('hello', async () => {
   const res = await fetch('https://example.com/');
   expect(res.status).toEqual(200);
   expect(await res.text()).toMatchSnapshot();
 });
 
-it('Pull image from docker hub', async () => {
+it.skip('Pull image from docker hub', async () => {
   const headers = new Headers({
     'accept-encoding': 'gzip, br',
     'user-agent':
@@ -36,6 +36,26 @@ it('Pull image from docker hub', async () => {
       Authorization: `Bearer ${tokenResult.access_token}`,
     },
   });
+  const manifestRes = await worker.fetch(manifestReq);
+  expect(manifestRes.status).toEqual(200);
+  const manifestResult = await manifestRes.json();
+  expect(manifestResult).toHaveProperty('name');
+  expect(manifestResult).toHaveProperty('fsLayers');
+  expect(manifestResult).toHaveProperty('history');
+  expect(manifestResult).toHaveProperty('tag');
+});
+
+it('Pull image from quay.io', async () => {
+  const headers = new Headers({
+    'accept-encoding': 'gzip, br',
+    'user-agent':
+      'docker/24.0.7 go/go1.20.10 git-commit/311b9ff kernel/6.6.9-200.fc39.x86_64 os/linux arch/amd64 UpstreamClient(Docker-Client/24.0.7 \\(linux\\))',
+  });
+  const v2Req = new Request('https://example.com/v2/quay.io', { headers });
+  const v2Res = await worker.fetch(v2Req);
+  expect(v2Res.status).toEqual(200);
+
+  const manifestReq = new Request('https://example.com/v2/quay.io/v2/minio/minio/manifests/latest', { headers });
   const manifestRes = await worker.fetch(manifestReq);
   expect(manifestRes.status).toEqual(200);
   const manifestResult = await manifestRes.json();

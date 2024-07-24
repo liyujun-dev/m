@@ -1,7 +1,7 @@
 import INDEX_HTML from './index.html';
 
 /** @type {string[]} */
-const registries = ['registry-1.docker.io'];
+const registries = ['registry-1.docker.io', 'quay.io', 'ghcr.io', 'gcr.io', 'registry.k8s.io'];
 
 export default {
   /**
@@ -14,20 +14,26 @@ export default {
    */
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    console.log(url);
     const workerUrl = `https://${url.hostname}/`;
-    const registry = registries[0];
-
     if (url.pathname === '/') {
       return new Response(INDEX_HTML, { headers: { 'Content-Type': 'text/html' } });
     }
     if (url.searchParams.has('scope') || url.searchParams.has('service')) {
-      const [_, authHostname, authPathname] = url.pathname.split('/');
+      const [_, authHostname, ...authPathname] = url.pathname.split('/');
       url.hostname = authHostname;
-      url.pathname = authPathname;
+      url.pathname = authPathname.join('/');
       return await fetch(new Request(url.href, request));
     }
 
+    if (url.pathname.startsWith('/v2') && url.pathname.includes('.')) {
+      url.pathname = url.pathname.replace('/v2', '');
+    }
+
+    const registry = registries.find((r) => url.pathname.startsWith(`/${r}`)) ?? registries[0];
     url.hostname = registry;
+    url.pathname = url.pathname.replace(`/${registry}`, '');
+    console.log(url);
     const res = await fetch(new Request(url, request));
     if (res.headers.get('Www-Authenticate')) {
       return new Response(res.body, {
