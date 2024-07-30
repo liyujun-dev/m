@@ -39,11 +39,11 @@ export default {
         const { token } = await auth.json();
         req.headers.set('Authorization', `Bearer ${token}`);
       }
+    }
 
-      res = await fetch(req);
-      if (res.headers.get('Location')) {
-        res = await fetch(new Request(res.headers.get('Location'), req), { redirect: 'follow' });
-      }
+    res = await fetch(req);
+    if (res.headers.get('Location')) {
+      res = await fetch(new Request(res.headers.get('Location'), req), { redirect: 'follow' });
     }
     return res;
   },
