@@ -36,6 +36,11 @@ const images = [
     tag: '3.20.2',
   },
   {
+    repo: 'bitnami',
+    image: 'redis',
+    tag: '7.0.15-debian-12-r20',
+  },
+  {
     repo: 'quay.io/prometheus',
     image: 'busybox',
     tag: 'latest',

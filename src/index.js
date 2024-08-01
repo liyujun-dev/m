@@ -21,8 +21,10 @@ export default {
     url.hostname = 'registry-1.docker.io';
     if (!url.pathname.startsWith('/v2/library') && !url.pathname.startsWith('/v2/docker.io')) {
       const registry = url.pathname.split('/')[2];
-      url.hostname = registry;
-      url.pathname = url.pathname.replace(`${registry}/`, '');
+      if (registry.includes(".")) {
+        url.hostname = registry;
+        url.pathname = url.pathname.replace(`${registry}/`, '');
+      }
     }
     if (url.pathname.startsWith('/v2/docker.io')) {
       url.pathname = url.pathname.replace('docker.io/', '');

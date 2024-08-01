@@ -577,3 +577,30 @@ exports[`pull 'javascript-node' with '1-18' from 'mcr.microsoft.com/devcontainer
   "schemaVersion": 2,
 }
 `
+
+exports[`pull 'redis' with '7.0.15-debian-12-r20' from 'bitnami' > get manifest 1`] = `
+{
+  "manifests": [
+    {
+      "digest": "sha256:740ccf999c0ed002bef18e0b3faeeb48ad5a25f1090634386c50b82ef3833c8f",
+      "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+      "platform": {
+        "architecture": "amd64",
+        "os": "linux",
+      },
+      "size": 429,
+    },
+    {
+      "digest": "sha256:29a01a752e7d9d5aefdfc8ba29e060eabed60a6577e376eefa449e633dfe180d",
+      "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+      "platform": {
+        "architecture": "arm64",
+        "os": "linux",
+      },
+      "size": 429,
+    },
+  ],
+  "mediaType": "application/vnd.docker.distribution.manifest.list.v2+json",
+  "schemaVersion": 2,
+}
+`;
