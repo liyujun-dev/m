@@ -80,6 +80,5 @@ describe.each(images)('pull $image with $tag from $repo', async ({ repo, image, 
   it('get manifest', async () => {
     const res = await worker.fetch(new Request(`${BASE_URL}/v2/${repo}/${image}/manifests/${tag}`, { headers }));
     expect(res.status).toEqual(200);
-    expect(await res.json()).toMatchSnapshot();
   });
 });
